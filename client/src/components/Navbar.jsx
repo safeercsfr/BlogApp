@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
-import Logo from "../images/Logo.png";
+import Logo from "../images/blogLogo.png";
+import Avatar from "../images/avatar.png";
 import search from "../images/search.png";
 import axios from "axios";
 
@@ -61,36 +62,35 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="container">
-        {currentUser?.role==="admin" ?(
+        {currentUser?.role === "admin" ? (
           <Link
-          onClick={() => {
-            setIsSearchActive(false);
-            setOpen(false);
-          }}
-          className="link"
-          
-          to="/dashboard">
-          <div className="logo">
-            <h3>Blog App</h3>
-            {/* <img className="logo" src={Logo} alt="" /> */}
-          </div>
-        </Link>
-        ):(
+            onClick={() => {
+              setIsSearchActive(false);
+              setOpen(false);
+            }}
+            className="link"
+            to="/dashboard"
+          >
+            <div className="logo">
+              <h3>Admin Dashboard</h3>
+              {/* <img className="logo" src={Logo} alt="" /> */}
+            </div>
+          </Link>
+        ) : (
           <Link
-          onClick={() => {
-            setIsSearchActive(false);
-            setOpen(false);
-          }}
-          className="link"
-          
-          to="/">
-          <div className="logo">
-            <h3>Blog App</h3>
-            {/* <img className="logo" src={Logo} alt="" /> */}
-          </div>
-        </Link>
+            onClick={() => {
+              setIsSearchActive(false);
+              setOpen(false);
+            }}
+            className="link"
+            to="/"
+          >
+            <div className="logo">
+              <img src={Logo} alt="logo" />
+            </div>
+          </Link>
         )}
-        
+
         <div className="links">
           {!isSearchActive && currentUser?.role !== "admin" && (
             <>
@@ -134,28 +134,31 @@ const Navbar = () => {
             />
           )}
 
-          {open && searchResults.length > 0 && searchKey.length > 0 && (
+          {open && searchResults?.length > 0 && searchKey?.length > 0 && (
             <ul className="search-suggestions">
               {/* Render search results */}
-              {searchResults.map((post) => (
-                <Link className="link" to={`/post/${post._id}`}>
+              {searchResults?.map((post) => (
+                <Link className="link" to={`/post/${post?._id}`}>
                   <li
                     onClick={() => {
                       setIsSearchActive(false);
                       setOpen(false);
                     }}
                     className="search-suggestions__item"
-                    key={post.id}>
-                    {post.title}
+                    key={post?.id}
+                  >
+                    {post?.title}
                   </li>
                 </Link>
               ))}
             </ul>
           )}
 
-          <span>{currentUser?.username}</span>
+          {/* <span>{currentUser?.username}</span> */}
           {currentUser?.role === "user" ? (
-            <span onClick={logout}>Logout</span>
+            <span className="logout-button" onClick={logout}>
+              Logout
+            </span>
           ) : currentUser?.role === "admin" ? (
             <span onClick={adminLogout}>Logout</span>
           ) : (
@@ -169,6 +172,12 @@ const Navbar = () => {
               <span className="write">Write</span>
             </Link>
           )}
+          <div className="user-profile">
+            <div className="avatar-frame">
+              <img src={Avatar} alt="AvatarLogo" />
+            </div>
+            <span className="username">{currentUser?.username}</span>
+          </div>
         </div>
       </div>
     </div>
